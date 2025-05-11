@@ -13,11 +13,11 @@ import java.nio.file.Path;
 public class SolverService {
 
     private Method solveMethod = null;
-    private Path zipPath = null;
+    private Path matrixPath = null;
 
 
     public Object solve(TaskRequest taskDTO) {
-        Object[] solveArgs = {zipPath, taskDTO.getStart(), taskDTO.getCount()};
+        Object[] solveArgs = {matrixPath, taskDTO.getStart(), taskDTO.getCount()};
         return ReflectionUtils.executeMethod(solveMethod, solveArgs);
     }
 

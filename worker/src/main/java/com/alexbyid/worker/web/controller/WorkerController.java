@@ -41,7 +41,6 @@ public class WorkerController {
 
     @PostMapping("/init")
     public ResponseEntity<ApiResponse> init(@RequestPart("jarFile") Part jarFile,
-                                            @RequestPart("archiveFile") Part archiveFile,
                                             @RequestPart("jsonData") Part jsonData,
                                             @RequestPart("jsonMatrix") Part jsonMatrix)
     {
@@ -60,26 +59,12 @@ public class WorkerController {
                     .array();
             Files.write(jarFilePath, jarBytes);
 
-            Path archiveFilePath = uploadDir.resolve(archiveFile.headers().getContentDisposition().getFilename());
-            byte[] archiveBytes = DataBufferUtils.join(archiveFile.content())
-                    .map(DataBuffer::asByteBuffer)
-                    .block()
-                    .array();
-            Files.write(archiveFilePath, archiveBytes);
-
             Path jsonFilePath = uploadDir.resolve(jsonData.headers().getContentDisposition().getFilename());
             byte[] jsonBytes = DataBufferUtils.join(jsonData.content())
                     .map(DataBuffer::asByteBuffer)
                     .block()
                     .array();
             Files.write(jsonFilePath, jsonBytes);
-
-            Path jsonMatrixPath = uploadDir.resolve(jsonMatrix.headers().getContentDisposition().getFilename());
-            byte[] jsonMatrixBytes = DataBufferUtils.join(jsonMatrix.content())
-                    .map(DataBuffer::asByteBuffer)
-                    .block()
-                    .array();
-            Files.write(jsonMatrixPath, jsonMatrixBytes);
 
             File jsonFile = jsonFilePath.toFile();
             ManifestDTO manifestDTO = mapper.readValue(jsonFile, ManifestDTO.class);
@@ -88,8 +73,15 @@ public class WorkerController {
                     jarFilePath,
                     manifestDTO.getClassName(),
                     manifestDTO.getAnnotationName()).get(0));
-            solverService.setZipPath(archiveFilePath);
-            File jsonMatrixFile = jsonMatrixPath.toFile();
+
+            Path matrixFilePath = uploadDir.resolve(jsonMatrix.headers().getContentDisposition().getFilename());
+            byte[] archiveBytes = DataBufferUtils.join(jsonMatrix.content())
+                    .map(DataBuffer::asByteBuffer)
+                    .block()
+                    .array();
+            Files.write(matrixFilePath, archiveBytes);
+
+            solverService.setMatrixPath(matrixFilePath);
             workerState.setWorkerStatusEnum(WorkerStatusEnum.FREE);
             log.info("Success init");
 

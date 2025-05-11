@@ -36,39 +36,39 @@ public class DistributorController {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping("/start")
-    public ResponseEntity<ApiResponse> startTask(@RequestParam("zipName") String zipName) {
+    public ResponseEntity<ApiResponse> startTask(@RequestParam("matrixName") String matrixName) {
 
-        if (!isZipFileValid(zipName)) {
+        if (!isMatrixFileValid(matrixName)) {
             ApiResponse response = new ApiResponse("No such file exists", HttpStatus.NOT_FOUND.value(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        log.info("Received new task. ZipName: {}", zipName);
-        distributorService.setZipName(zipName);
+        log.info("Received new task. MatrixName: {}", matrixName);
+        distributorService.setMatrixName(matrixName);
 
         ApiResponse response = new ApiResponse("Task started", HttpStatus.OK.value(), null);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public boolean isZipFileValid(String zipName) {
+    public boolean isMatrixFileValid(String matrixName) {
         try {
-            if (zipName == null || zipName.isEmpty()) {
+            if (matrixName == null || matrixName.isEmpty()) {
                 return false;
             }
 
-            Path filePath = Paths.get(UPLOAD_PATH, zipName);
+            Path filePath = Paths.get(UPLOAD_PATH, matrixName);
             return Files.exists(filePath)
                     && Files.isRegularFile(filePath)
-                    && zipName.toLowerCase().endsWith(".zip");
+                    && matrixName.toLowerCase().endsWith(".json");
         } catch (Exception e) {
-            log.error("Error checking zip file {}: {}", zipName, e.getMessage());
+            log.error("Error checking Matrix data file {}: {}", matrixName, e.getMessage());
             return false;
         }
     }
 
     @PostMapping("/result")
     public ResponseEntity<ApiResponse> receiveResult(@RequestBody ObjectNode result) throws JsonProcessingException {
-        if (distributorService.getZipName() == null) {
+        if (distributorService.getMatrixName() == null) {
             ApiResponse response = new ApiResponse("Global task already completed", HttpStatus.OK.value(), null);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }

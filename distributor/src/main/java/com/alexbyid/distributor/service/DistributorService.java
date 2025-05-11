@@ -36,7 +36,7 @@ public class DistributorService {
     private String JAR_FILE_PATH;
     @Value("${worker-init-files.manifest-path}")
     private String MANIFEST_PATH;
-    @Value("${worker-init-files.matrix-path}")
+    @Value("${uploads.matrix-path}")
     private String MATRIX_PATH;
 
     @Value("${manager.get-workers-endpoint}")
@@ -45,14 +45,14 @@ public class DistributorService {
     private String UPLOAD_PATH;
     @Getter
     @Setter
-    private String zipName = null;
+    private String matrixName = null;
 
     private static final long PROCESS_INTERVAL_MS = 10_000;
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @Scheduled(fixedRate = PROCESS_INTERVAL_MS)
     public void processTask() {
-        if (zipName == null) return;
+        if (matrixName == null) return;
 
         httpSenderService.sendGetRequest(MANAGER_GET_WORKERS_ENDPOINT, ApiResponse.class)
                 .flatMap(response -> {
@@ -70,7 +70,7 @@ public class DistributorService {
                 .delayElements(Duration.ofMillis(100))
                 .flatMap(worker -> {
                     if (worker.getWorkerStatus().equals(WorkerStatusEnum.UNINITIALIZED)) {
-                        return initWorker(worker, zipName).thenReturn(worker);
+                        return initWorker(worker, matrixName).thenReturn(worker);
                     }
                     else if (worker.getWorkerStatus().equals(WorkerStatusEnum.FREE)) {
                         return sendTask(worker).thenReturn(worker);
@@ -85,13 +85,12 @@ public class DistributorService {
                 );
     }
 
-    private Mono<Void> initWorker(WorkerDTO workerDTO, String zipName) {
+    private Mono<Void> initWorker(WorkerDTO workerDTO, String matrixName) {
         return Mono.fromCallable(() -> {
                     MultipartBodyBuilder builder = new MultipartBodyBuilder();
                     builder.part("jarFile", new FileSystemResource(Paths.get(JAR_FILE_PATH)));
                     builder.part("jsonData", new FileSystemResource(Paths.get(MANIFEST_PATH)));
-                    builder.part("archiveFile", new FileSystemResource(Paths.get(UPLOAD_PATH, zipName)));
-                    builder.part("jsonMatrix", new FileSystemResource(Paths.get(MATRIX_PATH)));
+                    builder.part("jsonMatrix", new FileSystemResource(Paths.get(UPLOAD_PATH, matrixName)));
 
                     return builder.build();
                 })
@@ -152,7 +151,7 @@ public class DistributorService {
     }
 
     public void stopGlobalTask() {
-        zipName = null;
+        matrixName = null;
         taskManager.reset();
         resetAllWorkers()
                 .subscribe(

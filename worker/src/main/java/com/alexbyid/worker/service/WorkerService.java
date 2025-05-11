@@ -58,7 +58,7 @@ public class WorkerService {
 
     public void reset() {
         workerState.setWorkerStatusEnum(WorkerStatusEnum.UNINITIALIZED);
-        solverService.setZipPath(null);
+        solverService.setMatrixPath(null);
         solverService.setSolveMethod(null);
         try {
             ReflectionUtils.classLoader.close();
