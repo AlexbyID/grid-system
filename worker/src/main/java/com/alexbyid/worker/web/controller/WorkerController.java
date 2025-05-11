@@ -41,8 +41,10 @@ public class WorkerController {
 
     @PostMapping("/init")
     public ResponseEntity<ApiResponse> init(@RequestPart("jarFile") Part jarFile,
-                     @RequestPart("archiveFile") Part archiveFile,
-                     @RequestPart("jsonData") Part jsonData){
+                                            @RequestPart("archiveFile") Part archiveFile,
+                                            @RequestPart("jsonData") Part jsonData,
+                                            @RequestPart("jsonMatrix") Part jsonMatrix)
+    {
 
         Path uploadDir = Paths.get(UPLOAD_PATH);
 
@@ -72,6 +74,13 @@ public class WorkerController {
                     .array();
             Files.write(jsonFilePath, jsonBytes);
 
+            Path jsonMatrixPath = uploadDir.resolve(jsonMatrix.headers().getContentDisposition().getFilename());
+            byte[] jsonMatrixBytes = DataBufferUtils.join(jsonMatrix.content())
+                    .map(DataBuffer::asByteBuffer)
+                    .block()
+                    .array();
+            Files.write(jsonMatrixPath, jsonMatrixBytes);
+
             File jsonFile = jsonFilePath.toFile();
             ManifestDTO manifestDTO = mapper.readValue(jsonFile, ManifestDTO.class);
 
@@ -80,6 +89,7 @@ public class WorkerController {
                     manifestDTO.getClassName(),
                     manifestDTO.getAnnotationName()).get(0));
             solverService.setZipPath(archiveFilePath);
+            File jsonMatrixFile = jsonMatrixPath.toFile();
             workerState.setWorkerStatusEnum(WorkerStatusEnum.FREE);
             log.info("Success init");
 

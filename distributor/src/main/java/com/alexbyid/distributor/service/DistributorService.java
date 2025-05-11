@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -32,10 +31,14 @@ public class DistributorService {
     private HttpSenderService httpSenderService;
     @Autowired
     private TaskManager taskManager;
+
     @Value("${worker-init-files.jar-file-path}")
     private String JAR_FILE_PATH;
     @Value("${worker-init-files.manifest-path}")
     private String MANIFEST_PATH;
+    @Value("${worker-init-files.matrix-path}")
+    private String MATRIX_PATH;
+
     @Value("${manager.get-workers-endpoint}")
     private String MANAGER_GET_WORKERS_ENDPOINT;
     @Value("${upload-path}")
@@ -88,6 +91,8 @@ public class DistributorService {
                     builder.part("jarFile", new FileSystemResource(Paths.get(JAR_FILE_PATH)));
                     builder.part("jsonData", new FileSystemResource(Paths.get(MANIFEST_PATH)));
                     builder.part("archiveFile", new FileSystemResource(Paths.get(UPLOAD_PATH, zipName)));
+                    builder.part("jsonMatrix", new FileSystemResource(Paths.get(MATRIX_PATH)));
+
                     return builder.build();
                 })
                 .subscribeOn(Schedulers.boundedElastic())
