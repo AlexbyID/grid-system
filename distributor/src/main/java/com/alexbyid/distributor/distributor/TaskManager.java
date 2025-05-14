@@ -70,6 +70,7 @@ public class TaskManager {
 
     public void removeCompetedTask(TaskDTO taskDTO) {
         log.info("Task completed {}:{}", taskDTO.getStart(), taskDTO.getCount());
+        log.info("Same????? {}", tasks.contains(taskDTO));
         tasks.remove(taskDTO);
     }
 

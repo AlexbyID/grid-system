@@ -75,8 +75,8 @@ public class DistributorController {
 
         JsonNode resultNode = result.get("result");
 
-        TaskDTO taskDTO = mapper.treeToValue(result.path("task"), TaskDTO.class);
-
+        TaskDTO taskDTO = mapper.treeToValue(result.get("task"), TaskDTO.class);
+        log.info("Our task??? - {}", taskDTO);
         taskManager.removeCompetedTask(taskDTO);
 
         boolean processResult = (boolean) distributorJarService.executeProcessResult(resultNode.toString());

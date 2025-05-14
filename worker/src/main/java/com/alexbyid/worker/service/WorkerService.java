@@ -44,7 +44,9 @@ public class WorkerService {
 
         ObjectNode finalResult = JsonNodeFactory.instance.objectNode();
         finalResult.set("result", result);
+        log.info("result???? - {}", finalResult);
         finalResult.set("task", mapper.valueToTree(taskRequest));
+        log.info("Task???? - {}", finalResult.get("task"));
 
         Mono<ApiResponse> responseMono = httpSenderService.sendPostRequest(taskRequest.getCallbackUrl(), finalResult, ApiResponse.class);
 

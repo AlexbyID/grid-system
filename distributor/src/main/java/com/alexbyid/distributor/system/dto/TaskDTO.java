@@ -1,13 +1,13 @@
 package com.alexbyid.distributor.system.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
-@EqualsAndHashCode
 public class TaskDTO {
 
     private String start;
@@ -24,5 +24,16 @@ public class TaskDTO {
         this.callbackUrl = callbackUrl;
         this.worker = null;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskDTO taskDTO = (TaskDTO) o;
+        return Objects.equals(start, taskDTO.start) && Objects.equals(count, taskDTO.count) && Objects.equals(callbackUrl, taskDTO.callbackUrl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, count, callbackUrl);
+    }
 }
