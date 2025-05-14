@@ -1,4 +1,4 @@
 {
-  "className": "org.example.PasswordBruteForceZip",
-  "annotationName": "org.example.Solve"
+  "className": "org.alexbyid.solver.MatrixService",
+  "annotationName": "org.alexbyid.solver.Solve"
 }

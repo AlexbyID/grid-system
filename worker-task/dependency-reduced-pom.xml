@@ -27,7 +27,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>org.example.PasswordBruteForceZip</mainClass>
+                  <mainClass>org.alexbyid.solver.MatrixService</mainClass>
                 </transformer>
               </transformers>
             </configuration>

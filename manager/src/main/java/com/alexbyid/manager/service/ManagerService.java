@@ -39,6 +39,8 @@ public class ManagerService {
     }
 
     public void leaveWorker(WorkerDTO worker) {
+        log.info("IT IS WORKER - {}:{}", worker.getHost(), worker.getPort());
+        log.info("Contains him? {}", workerList.contains(worker));
         workerList.remove(worker);
         log.info("Worker leaved {}:{}. Remaining workers: {}", worker.getHost(), worker.getPort(), workerList.size());
     }

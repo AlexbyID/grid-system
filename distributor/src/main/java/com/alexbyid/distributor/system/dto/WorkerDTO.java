@@ -1,12 +1,12 @@
 package com.alexbyid.distributor.system.dto;
 
 import com.alexbyid.distributor.enums.WorkerStatusEnum;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
-@EqualsAndHashCode
 public class WorkerDTO {
 
     private String host;
@@ -38,4 +38,15 @@ public class WorkerDTO {
         return String.format("%s/%s", fullAddress(), RESET_ENDPOINT);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkerDTO workerDTO = (WorkerDTO) o;
+        return port == workerDTO.port && Objects.equals(host, workerDTO.host);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(host, port);
+    }
 }

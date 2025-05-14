@@ -1,2 +1,5 @@
-org\example\Solve.class
-org\example\PasswordBruteForceZip.class
+org\alexbyid\solver\dto\MatrixDTO.class
+org\alexbyid\solver\LatinSquareSolver.class
+org\alexbyid\solver\MatrixService.class
+org\alexbyid\solver\Solve.class
+org\alexbyid\solver\dto\MatrixDTO$Cell.class

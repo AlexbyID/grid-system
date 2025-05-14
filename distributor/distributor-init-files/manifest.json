@@ -1,8 +1,8 @@
 {
-  "className": "org.example.DistributorTask",
-  "annotationEndName": "org.example.End",
-  "annotationProcessName": "org.example.Process",
+  "className": "org.alexbyid.processer.DistributorTask",
+  "annotationEndName": "org.alexbyid.processer.End",
+  "annotationProcessName": "org.alexbyid.processer.Process",
   "data": {
-    "passwordLength": 20
+      "matrixLength": 10000
   }
 }

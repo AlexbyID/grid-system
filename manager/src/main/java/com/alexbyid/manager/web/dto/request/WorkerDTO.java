@@ -5,8 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
-@EqualsAndHashCode
 public class WorkerDTO {
     private final String host;
     private final int port;
@@ -28,4 +29,15 @@ public class WorkerDTO {
         return String.format("%s/%s", fullAddress(), CHECK_STATE_ENDPOINT);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkerDTO workerDTO = (WorkerDTO) o;
+        return port == workerDTO.port && Objects.equals(host, workerDTO.host);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(host, port);
+    }
 }

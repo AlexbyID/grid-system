@@ -73,7 +73,7 @@ public class DistributorController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
-        JsonNode resultNode = result.path("result");
+        JsonNode resultNode = result.get("result");
 
         TaskDTO taskDTO = mapper.treeToValue(result.path("task"), TaskDTO.class);
 

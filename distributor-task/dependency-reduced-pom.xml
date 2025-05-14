@@ -27,7 +27,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>org.example.DistributorTask</mainClass>
+                  <mainClass>org.alexbyid.processer.DistributorTask</mainClass>
                 </transformer>
               </transformers>
             </configuration>

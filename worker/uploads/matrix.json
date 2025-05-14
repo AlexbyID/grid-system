@@ -1,8 +1,3 @@
 {
-  "size": 5,
-  "predefined": [
-    {"row": 0, "col": 1, "value": "A"},
-    {"row": 1, "col": 2, "value": "B"},
-    {"row": 2, "col": 0, "value": "C"}
-  ]
+  "size": 3
 }

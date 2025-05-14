@@ -1,0 +1,5 @@
+# Created at 2025-05-14T10:40:33.312
+Boot Manifest-JAR contains absolute paths in classpath 'E:\kulagin_refactor\worker-task\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+
